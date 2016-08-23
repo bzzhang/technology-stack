@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import technology.it.stack.jms.producer.Producer;
+import technology.it.stack.jms.producer.VmProducer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -16,9 +17,17 @@ public class JmsTestcase {
 	@Autowired
 	private Producer producter;
 	
+	@Autowired
+	private VmProducer vmproducter;
+	
 	@Test
 	public void jmsdemo(){
 		producter.messageCreate();
+	}
+	
+	@Test
+	public void vmjmsdemo(){
+		vmproducter.messageCreate();
 	}
 	
 

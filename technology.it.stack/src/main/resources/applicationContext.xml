@@ -21,12 +21,15 @@
     http://www.springframework.org/schema/task/spring-task.xsd">
 
     <context:annotation-config />
-    <context:component-scan base-package="com.jms" />
+    <context:component-scan base-package="technology.it.stack" />
     <bean id="myJmsContainerFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
     </bean>
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61616"/>
+     <!--   <constructor-arg name="brokerURL" type="java.lang.String" value="vm://localhost?create=false">
+       </constructor-arg> -->
+        <property name="brokerURL" value="vm://localhost?create=false"/>      
+<!--        <property name="brokerURL" value="tcp://localhost:61616"/>       -->
     </bean>
     
     <!--生产者  -->
