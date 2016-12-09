@@ -50,7 +50,59 @@
         <property name="connectionFactory" ref="myJmsContainerFactory" />
         <property name="destination" ref="queueDestination" />
         <property name="messageListener" ref="receiver" />
-    </bean> 
+    </bean>
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+                <value>classpath:application.properties</value>
+            </list>
+        </property>
+    </bean>
+    <!-- datasource -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.truck.url}" />
+        <property name="user" value="${jdbc.truck.username}" />
+        <property name="password" value="${jdbc.truck.password}" />
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="50" />
+        <property name="maxIdleTime" value="1800" />
+        <property name="acquireIncrement" value="3" />
+        <property name="maxStatements" value="0" />
+        <property name="initialPoolSize" value="5" />
+        <property name="idleConnectionTestPeriod" value="600" />
+        <property name="acquireRetryAttempts" value="30" />
+        <property name="acquireRetryDelay" value="100" />
+        <property name="breakAfterAcquireFailure" value="false" />
+        <property name="testConnectionOnCheckout" value="false" />
+    </bean>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="mapperLocations" value="classpath:mapper/*.xml" />
+    </bean>
+    <bean id="simpleSqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+        <constructor-arg index="1" value="SIMPLE" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="technology.it.stack.mybatis.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="txManager" />
+
+
+
    
    
     

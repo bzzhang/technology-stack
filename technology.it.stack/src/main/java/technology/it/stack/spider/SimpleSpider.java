@@ -6,6 +6,7 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 public class SimpleSpider {
@@ -13,7 +14,7 @@ public class SimpleSpider {
 	public static Document demo(String url){
 		Document d=null;
 		try {
-			d = Jsoup.connect(url).get();
+			d = Jsoup.connect(url).timeout(5 * 1000).get();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -22,13 +23,23 @@ public class SimpleSpider {
 	}
 	
 	public static void main(String[] args) {
-		Document d=SimpleSpider.demo("http://www.baidu.com");
-		Elements eles=d.getElementsByTag("a");
-		for(int i=0;i<eles.size();i++){
-			Element e=eles.get(i);
-			System.out.println(e.text()+" -------链接:"+e.attr("href"));
+		Document d=SimpleSpider.demo("http://www.fob001.cn/jxjh.htm?name=JIN+XIU+HE&s=search&ac=a");
+		Elements eles=d.select("tr>:contains(004N)");
+		if(eles.size()>0){
+			for(Element e:eles){
+				System.out.println(e.parent().select("td").get(0).text());
+				System.out.println(e.parent().select("td").get(1).text());
+				System.out.println(e.parent().select("td").get(2).text());
+				System.out.println(e.parent().select("td").get(3).text());
+			}
 		}
-		System.out.println(d.getElementsByTag("a"));
+		
+
+	/*	for(Node node:nodes){
+			System.out.println(node.outerHtml());
+			System.out.println(node.nodeName());
+		}*/
+
 		
 	}
 
